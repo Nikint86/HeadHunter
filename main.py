@@ -3,10 +3,6 @@ from dotenv import load_dotenv
 import os
 from terminaltables import AsciiTable
 
-load_dotenv()
-
-api_app_id = os.environ.get("SUPERJOB_KEY")
-
 
 def predict_rub_salary_hh(vacancy):
     vacancy_salary_info = vacancy.get('salary')
@@ -115,7 +111,10 @@ def print_results_table(results, title):
 
 
 def main():
+    load_dotenv()
+
     api_app_id = os.environ.get("SUPERJOB_KEY")
+
     if api_app_id is None:
         return print("Неверный ключ superjob")
 

@@ -26,7 +26,7 @@ def predict_rub_salary_superjob(vacancy):
     return None
 
 
-def get_vacancies_hh():
+def get_statistics_hh():
     url = "https://api.hh.ru/vacancies"
     programming_languages = ["Python", "C", "C++", "Java", "JavaScript", "Scala", "Ruby", "Swift"]
     hh_vacancies = {}
@@ -118,7 +118,7 @@ def main():
     if api_app_id is None:
         return print("Неверный ключ superjob")
 
-    hh_results = get_vacancies_hh()
+    hh_results = get_statistics_hh()
     sj_results = get_vacancies_superjob(api_app_id)
 
     print_results_table(hh_results, "Результаты hh.ru")

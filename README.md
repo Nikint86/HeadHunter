@@ -13,7 +13,7 @@
 
 Полученный API необходимо вписать в .env файл
 
-Запустить код в коммандной строке: `python vacancies_analysis.py`
+Запустить код в коммандной строке: ```python vacancies_analysis.py```
 
 ---
 

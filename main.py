@@ -5,7 +5,6 @@ from terminaltables import AsciiTable
 
 load_dotenv()
 
-
 api_app_id = os.environ.get("SUPERJOB_KEY")
 
 
@@ -14,9 +13,9 @@ def predict_rub_salary_hh(vacancy):
     if salary_info:
         salary_from = salary_info.get('from')
         salary_to = salary_info.get('to')
-        if salary_from is not None:
+        if salary_from:
             return float(salary_from)
-        if salary_to is not None:
+        if salary_to:
             return float(salary_to)
     return None
 
@@ -24,9 +23,9 @@ def predict_rub_salary_hh(vacancy):
 def predict_rub_salary_superjob(vacancy):
     salary_from = vacancy.get('payment_from')
     salary_to = vacancy.get('payment_to')
-    if salary_from is not None:
+    if salary_from:
         return float(salary_from)
-    if salary_to is not None:
+    if salary_to:
         return float(salary_to)
     return None
 
@@ -49,7 +48,7 @@ def get_vacancies_hh():
 
         for vacancy in vacancies_data['items']:
             salary = predict_rub_salary_hh(vacancy)
-            if salary is not None:
+            if salary:
                 salaries.append(salary)
 
         average_salary = int(sum(salaries) / len(salaries)) if salaries else 0
@@ -83,7 +82,7 @@ def get_vacancies_superjob(api_app_id):
 
         for vacancy in vacancies_data['objects']:
             salary = predict_rub_salary_superjob(vacancy)
-            if salary is not None:
+            if salary:
                 salaries.append(salary)
 
         average_salary = int(sum(salaries) / len(salaries)) if salaries else 0
@@ -116,9 +115,9 @@ def print_results_table(results, title):
 
 
 def main():
-    api_app_id = os.environ.get("X_API_APP_ID")
+    api_app_id = os.environ.get("SUPERJOB_KEY")
     if api_app_id is None:
-        return
+        return print("Неверный ключ superjob")
 
     hh_results = get_vacancies_hh()
     sj_results = get_vacancies_superjob(api_app_id)

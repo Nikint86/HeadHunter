@@ -7,7 +7,7 @@ load_dotenv()
 
 client_id = os.environ.get("CLIENT_ID")
 client_secret = os.environ.get("CLIENT_SECRET")
-api_app_id = os.environ.get("X_API_APP_ID")
+api_app_id = os.environ.get("SUPERJOB_KEY")
 
 
 def predict_rub_salary_hh(vacancy):

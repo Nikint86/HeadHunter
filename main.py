@@ -34,24 +34,44 @@ def get_statistics_hh():
     hh_vacancies = {}
 
     for language in programming_languages:
-        params = {
-            "text": f"Программист {language}",
-            "area": moscow,
-            "per_page": vacancies_per_page,
-        }
-        response = requests.get(url, params=params)
-        response.raise_for_status()
-        vacancies_hh = response.json()
-        salaries = []
+        print(f"Скачиваю вакансии для языка: {language}")
+        page = 0
+        all_vacancies = []
+        vacancies_found = 0
 
-        for vacancy in vacancies_hh['items']:
+        while True:
+            print(f"Страница {page}")
+            params = {
+                "text": f"Программист {language}",
+                "area": moscow,
+                "per_page": vacancies_per_page,
+                "page": page
+            }
+            response = requests.get(url, params=params)
+            response.raise_for_status()
+            vacancies_hh = response.json()
+
+            if page == 0:
+                vacancies_found = vacancies_hh['found']
+
+            all_vacancies.extend(vacancies_hh['items'])
+
+            if page >= vacancies_hh['pages'] - 1:
+                break
+
+            page += 1
+
+        print(f"Всего скачано вакансий для {language}: {len(all_vacancies)}")
+
+        salaries = []
+        for vacancy in all_vacancies:
             salary = predict_rub_salary_hh(vacancy)
             if salary:
                 salaries.append(salary)
 
         average_salary = int(sum(salaries) / len(salaries)) if salaries else 0
         hh_vacancies[language] = {
-            "vacancies_found": vacancies_hh['found'],
+            "vacancies_found": vacancies_found,
             "vacancies_processed": len(salaries),
             "average_salary": average_salary
         }
@@ -65,27 +85,47 @@ def get_vacancies_superjob(api_app_id):
     superjob_vacancies = {}
 
     for language in programming_languages:
-        params = {
-            "keyword": f"Программист {language}",
-            "town": "Москва",
-            "count": 100,
-        }
-        headers = {
-            "X-Api-App-Id": api_app_id
-        }
-        response = requests.get(url, headers=headers, params=params)
-        response.raise_for_status()
-        vacancies_superjob = response.json()
-        salaries = []
+        print(f"Скачиваю вакансии для языка: {language}")
+        page = 0
+        all_vacancies = []
+        vacancies_found = 0
 
-        for vacancy in vacancies_superjob['objects']:
+        while True:
+            print(f"Страница {page}")
+            params = {
+                "keyword": f"Программист {language}",
+                "town": "Москва",
+                "count": 100,
+                "page": page
+            }
+            headers = {
+                "X-Api-App-Id": api_app_id
+            }
+            response = requests.get(url, headers=headers, params=params)
+            response.raise_for_status()
+            vacancies_superjob = response.json()
+
+            if page == 0:
+                vacancies_found = vacancies_superjob['total']
+
+            all_vacancies.extend(vacancies_superjob['objects'])
+
+            if not vacancies_superjob['more']:
+                break
+
+            page += 1
+
+        print(f"Всего скачано вакансий для {language}: {len(all_vacancies)}")
+
+        salaries = []
+        for vacancy in all_vacancies:
             salary = predict_rub_salary_superjob(vacancy)
             if salary:
                 salaries.append(salary)
 
         average_salary = int(sum(salaries) / len(salaries)) if salaries else 0
         superjob_vacancies[language] = {
-            "vacancies_found": vacancies_superjob['total'],
+            "vacancies_found": vacancies_found,
             "vacancies_processed": len(salaries),
             "average_salary": average_salary
         }

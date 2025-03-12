@@ -28,6 +28,7 @@ def predict_rub_salary_superjob(vacancy):
 
 def get_statistics_hh():
     moscow = 1
+    vacancies_per_page = 100
     url = "https://api.hh.ru/vacancies"
     programming_languages = ["Python", "C", "C++", "Java", "JavaScript", "Scala", "Ruby", "Swift"]
     hh_vacancies = {}
@@ -36,7 +37,7 @@ def get_statistics_hh():
         params = {
             "text": f"Программист {language}",
             "area": moscow,
-            "per_page": 100,
+            "per_page": vacancies_per_page,
         }
         response = requests.get(url, params=params)
         response.raise_for_status()

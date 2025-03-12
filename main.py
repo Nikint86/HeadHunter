@@ -9,10 +9,10 @@ api_app_id = os.environ.get("SUPERJOB_KEY")
 
 
 def predict_rub_salary_hh(vacancy):
-    salary_info = vacancy.get('salary')
-    if salary_info:
-        salary_from = salary_info.get('from')
-        salary_to = salary_info.get('to')
+    vacancy_salary_info = vacancy.get('salary')
+    if vacancy_salary_info:
+        salary_from = vacancy_salary_info.get('from')
+        salary_to = vacancy_salary_info.get('to')
         if salary_from:
             return float(salary_from)
         if salary_to:
@@ -33,7 +33,7 @@ def predict_rub_salary_superjob(vacancy):
 def get_vacancies_hh():
     url = "https://api.hh.ru/vacancies"
     programming_languages = ["Python", "C", "C++", "Java", "JavaScript", "Scala", "Ruby", "Swift"]
-    hh_results = {}
+    hh_vacancies = {}
 
     for language in programming_languages:
         params = {
@@ -43,28 +43,28 @@ def get_vacancies_hh():
         }
         response = requests.get(url, params=params)
         response.raise_for_status()
-        vacancies_data = response.json()
+        vacancies_hh = response.json()
         salaries = []
 
-        for vacancy in vacancies_data['items']:
+        for vacancy in vacancies_hh['items']:
             salary = predict_rub_salary_hh(vacancy)
             if salary:
                 salaries.append(salary)
 
         average_salary = int(sum(salaries) / len(salaries)) if salaries else 0
-        hh_results[language] = {
-            "vacancies_found": vacancies_data['found'],
+        hh_vacancies[language] = {
+            "vacancies_found": vacancies_hh['found'],
             "vacancies_processed": len(salaries),
             "average_salary": average_salary
         }
 
-    return hh_results
+    return hh_vacancies
 
 
 def get_vacancies_superjob(api_app_id):
     url = "https://api.superjob.ru/2.0/vacancies/"
     programming_languages = ["Python", "C", "C++", "Java", "JavaScript", "Scala", "Ruby", "Swift"]
-    sj_results = {}
+    superjob_vacancies = {}
 
     for language in programming_languages:
         params = {
@@ -77,22 +77,22 @@ def get_vacancies_superjob(api_app_id):
         }
         response = requests.get(url, headers=headers, params=params)
         response.raise_for_status()
-        vacancies_data = response.json()
+        vacancies_superjob = response.json()
         salaries = []
 
-        for vacancy in vacancies_data['objects']:
+        for vacancy in vacancies_superjob['objects']:
             salary = predict_rub_salary_superjob(vacancy)
             if salary:
                 salaries.append(salary)
 
         average_salary = int(sum(salaries) / len(salaries)) if salaries else 0
-        sj_results[language] = {
-            "vacancies_found": vacancies_data['total'],
+        superjob_vacancies[language] = {
+            "vacancies_found": vacancies_superjob['total'],
             "vacancies_processed": len(salaries),
             "average_salary": average_salary
         }
 
-    return sj_results
+    return superjob_vacancies
 
 
 def print_results_table(results, title):
@@ -100,12 +100,12 @@ def print_results_table(results, title):
         ["Язык программирования", "Найдено вакансий", "Обработано вакансий", "Средняя зарплата"]
     ]
 
-    for language, data in results.items():
+    for language, vacancies_data in results.items():
         table_data.append([
             language,
-            data["vacancies_found"],
-            data["vacancies_processed"],
-            data["average_salary"]
+            vacancies_data["vacancies_found"],
+            vacancies_data["vacancies_processed"],
+            vacancies_data["average_salary"]
         ])
 
     table = AsciiTable(table_data)

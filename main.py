@@ -9,20 +9,24 @@ def predict_rub_salary_hh(vacancy):
     if vacancy_salary_info:
         salary_from = vacancy_salary_info.get('from')
         salary_to = vacancy_salary_info.get('to')
+        if salary_from and salary_to:
+            return (salary_from + salary_to) / 2
         if salary_from:
-            return float(salary_from)
+            return salary_from * 1.2
         if salary_to:
-            return float(salary_to)
+            return salary_to * 0.8
     return None
 
 
 def predict_rub_salary_superjob(vacancy):
     salary_from = vacancy.get('payment_from')
     salary_to = vacancy.get('payment_to')
+    if salary_from and salary_to:
+        return (salary_from + salary_to) / 2
     if salary_from:
-        return float(salary_from)
+        return salary_from * 1.2
     if salary_to:
-        return float(salary_to)
+        return salary_to * 0.8
     return None
 
 

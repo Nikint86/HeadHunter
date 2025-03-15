@@ -9,13 +9,19 @@
 
 ## Как установить
 
-Необходимо скачать нужные библиотеки ```pip install -r requirements.txt```
+Необходимо скачать нужные библиотеки
+```
+pip install -r requirements.txt
+```
 
 Для работы вам необходим X-Api-App-Id с сайта [SuperJob.ru](https://api.superjob.ru)
 
 Полученный API необходимо вписать в .env файл
 
-Запустить код в коммандной строке: ```python vacancies_analysis.py```
+Запустить код в коммандной строке: 
+```
+python vacancies_analysis.py
+```
 
 ---
 

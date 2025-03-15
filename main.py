@@ -142,12 +142,12 @@ def print_results_table(results, title):
         ["Язык программирования", "Найдено вакансий", "Обработано вакансий", "Средняя зарплата"]
     ]
 
-    for language, vacancies_data in results.items():
+    for language, vacancies in results.items():
         table_data.append([
             language,
-            vacancies_data["vacancies_found"],
-            vacancies_data["vacancies_processed"],
-            vacancies_data["average_salary"]
+            vacancies["vacancies_found"],
+            vacancies["vacancies_processed"],
+            vacancies["average_salary"]
         ])
 
     table = AsciiTable(table_data)
@@ -164,12 +164,12 @@ def main():
     if api_app_id is None:
         return print("Неверный ключ superjob")
 
-    hh_results = get_statistics_hh()
-    sj_results = get_statistics_superjob(api_app_id)
+    hh_vacancies_statistics = get_statistics_hh()
+    sj_vacancies_statistics = get_statistics_superjob(api_app_id)
 
-    print_results_table(hh_results, "Результаты hh.ru")
+    print_results_table(hh_vacancies_statistics, "Результаты hh.ru")
     print("\n")
-    print_results_table(sj_results, "Результаты SuperJob")
+    print_results_table(sj_vacancies_statistics, "Результаты SuperJob")
 
 
 if __name__ == "__main__":

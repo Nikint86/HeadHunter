@@ -83,7 +83,7 @@ def get_statistics_hh():
     return hh_vacancies
 
 
-def get_vacancies_superjob(api_app_id):
+def get_statistics_superjob(api_app_id):
     url = "https://api.superjob.ru/2.0/vacancies/"
     programming_languages = ["Python", "C", "C++", "Java", "JavaScript", "Scala", "Ruby", "Swift"]
     superjob_vacancies = {}

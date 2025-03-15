@@ -4,23 +4,7 @@ import os
 from terminaltables import AsciiTable
 
 
-def predict_rub_salary_hh(vacancy):
-    vacancy_salary_info = vacancy.get('salary')
-    if vacancy_salary_info:
-        salary_from = vacancy_salary_info.get('from')
-        salary_to = vacancy_salary_info.get('to')
-        if salary_from and salary_to:
-            return (salary_from + salary_to) / 2
-        if salary_from:
-            return salary_from * 1.2
-        if salary_to:
-            return salary_to * 0.8
-    return None
-
-
-def predict_rub_salary_superjob(vacancy):
-    salary_from = vacancy.get('payment_from')
-    salary_to = vacancy.get('payment_to')
+def calculate_salary(salary_from, salary_to):
     if salary_from and salary_to:
         return (salary_from + salary_to) / 2
     if salary_from:
@@ -28,6 +12,21 @@ def predict_rub_salary_superjob(vacancy):
     if salary_to:
         return salary_to * 0.8
     return None
+
+
+def predict_rub_salary_hh(vacancy):
+    vacancy_salary_info = vacancy.get('salary')
+    if vacancy_salary_info:
+        salary_from = vacancy_salary_info.get('from')
+        salary_to = vacancy_salary_info.get('to')
+        return calculate_salary(salary_from, salary_to)
+    return None
+
+
+def predict_rub_salary_superjob(vacancy):
+    salary_from = vacancy.get('payment_from')
+    salary_to = vacancy.get('payment_to')
+    return calculate_salary(salary_from, salary_to)
 
 
 def get_statistics_hh():
@@ -165,7 +164,7 @@ def main():
         return print("Неверный ключ superjob")
 
     hh_results = get_statistics_hh()
-    sj_results = get_vacancies_superjob(api_app_id)
+    sj_results = get_statistics_superjob(api_app_id)
 
     print_results_table(hh_results, "Результаты hh.ru")
     print("\n")

@@ -18,6 +18,8 @@ pip install -r requirements.txt
 
 Полученный API необходимо вписать в .env файл
 
+`SUPERJOB_KEY` = "Ваш API"
+
 Запустить код в коммандной строке: 
 ```
 python vacancies_analysis.py

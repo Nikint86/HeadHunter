@@ -5,13 +5,14 @@ from terminaltables import AsciiTable
 
 
 def calculate_salary(salary_from, salary_to):
-    if salary_from and salary_to:
+    if salary_from is not None and salary_to is not None:
         return (salary_from + salary_to) / 2
-    if salary_from:
+    elif salary_from is not None:
         return salary_from * 1.2
-    if salary_to:
+    elif salary_to is not None:
         return salary_to * 0.8
-    return None
+    else:
+        return None
 
 
 def predict_rub_salary_hh(vacancy):
